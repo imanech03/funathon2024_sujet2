@@ -7,11 +7,40 @@ filters:
 ---
 
 ```{=html}
-<a href="https://datalab.sspcloud.fr/launcher/ide/rstudio?version=1.15.25&autoLaunch=false&networking.user.enabled=true&git.repository=«https%3A%2F%2Fgithub.com%2FInseeFrLab%2Ffunathon2024_sujet2.git»&onyxia.friendlyName=«config-funathon2024»&kubernetes.role=«admin»" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/SSP%20Cloud-Ouvrir_dans_RStudio-blue?logo=rstudio&amp;logoColor=blue" alt="Onyxia"></a>
+<a href="https://datalab.sspcloud.fr/launcher/ide/rstudio?name=Funathon%202024%20-%20Sujet%202&version=1.15.26&autoLaunch=false&networking.user.enabled=true&git.repository=«https%3A%2F%2Fgithub.com%2FInseeFrLab%2Ffunathon2024_sujet2.git»&onyxia.friendlyName=«config-funathon2024»&kubernetes.role=«admin»&git.cache=«36000»" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/SSP%20Cloud-Ouvrir_dans_RStudio-blue?logo=rstudio&amp;logoColor=blue" alt="Onyxia"></a>
+<a href="https://datalab.sspcloud.fr/launcher/ide/vscode-python?version=1.11.35&autoLaunch=false&networking.user.enabled=true&git.repository=«https%3A%2F%2Fgithub.com%2Finseefrlab%2Ffunathon2024_sujet2.git»&git.cache=«36000»&kubernetes.role=«admin»" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/SSP%20Cloud-Ouvrir_dans_VSCode-blue?logo=vscode&amp;logoColor=blue" alt="Onyxia"></a>
 ```
 
+<br>
+
+
+```{=html}
+<table>
+  <thead>
+    <tr>
+      <th>Niveau technique</th>
+      <th>Enjeux</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="level-button level-debutant">Débutant</span></td>
+      <td>Suivre les consignes, tester les exemples, reprendre et comprendre les corrections. <b>Ne pas se préoccuper de la fin du tutoriel (l'ouverture vers la mise en production)</b>.</td>
+    </tr>
+    <tr>
+      <td><span class="level-button level-intermediaire">Intermédiaire</span></td>
+      <td>Chercher à faire les exercices et ne regarder les aides que si nécessaire. <b>Ne pas se préoccuper de la fin du tutoriel (l'ouverture vers la mise en production)</b>.</td>
+    </tr>
+    <tr>
+      <td><span class="level-button level-expert">Expert</span></td>
+      <td>Faire les premiers exercices en autonomie. <b>L'objectif principal est de faire la partie mise en production</b>.</td>
+    </tr>
+  </tbody>
+</table>
+```
 
 {{< include "parts/01-intro.qmd" >}}
+
 
 # Exploration des données de trafic aérien
 
@@ -32,18 +61,31 @@ Le projet récupéré comporte de nombreux fichiers. Nous allons
 progressivement les découvrir dans ce tutoriel. A l'heure actuelle,
 on peut se concentrer sur les fichiers suivants:
 
-```
+::: {.panel-tabset group="language"}
+
+## {{< fa brands r-project >}}
+
+```{.r}
 funathon_sujet2/
 ├── renv.lock
-├── global.R
-├── server.R
-└── ui.R
+├── correction/R/
+├── correction/global.R
+├── correction/server.R
+└── correction/ui.R
 ```
+
 
 Le premier fichier (`renv.lock`) correspond à la liste des _packages_ nécessaires
 pour reproduire l'environnement. Il a été généré automatiquement grâce à 
 un écosystème `renv` particulièrement adapté pour assurer la reproductibilité
 de projets {{< fa brands r-project >}} (voir la suite). 
+
+Les fichiers `server.R` et `ui.R` constituent le coeur de notre application 
+`Shiny`. Ils représentent, respectivement, le moteur de calcul (le serveur)
+et l'interface utilisateur de notre application. Nous reviendrons sur ce concept. Le fichier `global.R` stocke
+un certain nombre d'objets utiles à l'application mais qui n'ont pas besoin
+d'être recalculés à chaque action sur l'interface graphique. Nous allons progressivement construire ces fichiers pendant les différents exercices. De nombreuses fonctions sont reportées dans les fichiers au sein du dossier `R/`.
+
 
 <details>
 <summary>
@@ -53,11 +95,39 @@ Observer la composition de ce fichier (100 premières lignes)
 ```
 </details>
 
-Les fichiers `server.R` et `ui.R` constituent le coeur de notre application 
-`Shiny`. Ils représentent, respectivement, le moteur de calcul (le serveur)
-et l'interface utilisateur de notre application. Nous reviendrons sur ce concept. Le fichier `global.R` stocke
-un certain nombre d'objets utiles à l'application mais qui n'ont pas besoin
-d'être recalculés à chaque action sur l'interface graphique. Nous allons progressivement construire ces fichiers pendant les différents exercices.
+
+## {{< fa brands python >}}
+
+```{.r}
+funathon_sujet2/
+├── requirements.txt
+├── correction/src/
+└── correction/app.py
+```
+
+
+Le premier fichier (`requirements.txt`) correspond à la liste des _packages_ nécessaires
+pour reproduire l'environnement. Il s'agit d'un 
+outil particulièrement adapté pour assurer la reproductibilité
+de projets {{< fa brands python >}} (voir la suite). 
+
+Le fichier `app.py` constitue le coeur de notre application 
+`Streamlit`. Ils représentent, respectivement, le moteur de calcul (le serveur)
+et l'interface utilisateur de notre application. Nous reviendrons sur ce concept. Par ailleurs, de nombreuses fonctions utiles pour l'application sont reportées dans les fichiers au sein du dossier `src/` (abréviation de "source").
+
+<details>
+<summary>
+Observer la composition de ce fichier
+</summary>
+```{.yaml include="requirements.txt" filename="requirements.txt"}
+```
+</details>
+
+
+:::
+
+
+
 
 
 ## Installer les _packages_ nécessaires pour ce tutoriel
@@ -67,13 +137,22 @@ d'être recalculés à chaque action sur l'interface graphique. Nous allons prog
 
 # Récupérer les données
 
-Les sources sont listées dans le fichier `sources.yaml`. 
-Notre tutoriel utilisera quatres sources différentes :
+## Objectifs
 
-- Le trafic au niveau de chaque aéroport (format _CSV_)
-- Le nombre de passagers pour différentes liaisons (format _CSV_)
-- Le trafic pour différentes compagnies (format _CSV_)
-- Les localisations des aéroports (format _geojson_)
+Dans cette partie, vous allez explorer les données utilisées pour construire le tableau de bord, avec trois objectifs:
+
+- vous familiariser avec les sources statistiques sur le trafic aérien;
+- développer des fonctions permettant d'importer automatiquement ces données;
+- découvrir comment vous pouvez organiser ces fonctions pour qu'elles puissent être facilement utilisées par l’application web (_spoiler alert_: c'est là que le dossier `R/` ou `src/` va servir).
+
+## Sources
+
+Les sources statistiques utilisées dans ce tutoriel sont listées dans le fichier `sources.yaml`. Il y a quatre sources différentes:
+
+- Le trafic au niveau de chaque aéroport (format _CSV_);
+- Le nombre de passagers pour différentes liaisons (format _CSV_);
+- Le trafic pour différentes compagnies (format _CSV_);
+- Les localisations des aéroports (format _geojson_).
 
 Une bonne pratique, lorsqu'on utilise plusieurs sources,
 est de lister celles-ci dans un fichier `YAML` plutôt que de les inscrire
@@ -126,36 +205,38 @@ urls = create_data_list("sources.yml")
 source("intermediates/exo2.R")
 ```
 
+## Objectifs
 
-## Le trafic par aéroport
+Dans cette partie, vous allez exploiter les données pour produire trois valorisations qui seront ensuite intégrées dans l'application web:
 
-Pour commencer, nous allons prototyper la production d'une figure
-sur le trafic aérien au niveau d'un aéroport. Cela nous facilitera ensuite
-l'intégration dans une application interactive. 
+1. un graphique dynamique présentant le trafic pour un aéroport donné;
+2. un tableau HTML affichant des données sur le trafic;
+3. une carte des aéroports.
 
-Pour cela, nous allons créer les deux objets temporaires suivants,
-que vous pouvez mettre à la fin du fichier `main.R` (ou `main.py`) pour le moment
+Une fois que ces valorisations seront prêtes, nous pourrons nous pencher sur leur intégration dans une application interactive. 
+
+## Prérequis: créer le script `main`
+
+Pour commencer, vous allez créer un fichier fichier `main.R` ({{< fa brands r-project >}}) ou `main.py` ({{< fa brands python >}}) à la racine du dépôt. Ensuite, vous pouvez y copier le code suivant.
+
 
 ::::: {.panel-tabset group="language"}
 
 ## {{< fa brands r-project >}}
 
-```{r}
-liste_aeroports <- unique(pax_apt_all$apt)
-default_airport <- liste_aeroports[1]
-default_airport
+```{.r include="intermediates/exo3.R" end-line=24}
 ```
 
 ## {{< fa brands python >}}
 
 
-```{.python}
-liste_aeroports = pax_apt_all['apt'].unique()
-default_airport = liste_aeroports[0]
-default_airport
+```{.python include="intermediates/exo3.py" end-line=24}
 ```
 
 :::::
+
+
+## Valorisation 1: Le trafic par aéroport
 
 
 ```{r}
@@ -164,29 +245,29 @@ default_airport
 source("intermediates/exo3.R")
 ```
 
-Dans le prochain exercice, nous proposons d'abord de créer une figure minimale (avec `ggplot` {{< fa brands r-project >}} ou son équivalent {{< fa brands python >}} `plotnine`) pour vérifier que
-nos données ont bien la dimension temporelle attendue. Cependant, comme `Shiny` est un système
-interactif, on privilégiera la librairie [`Plotly`](https://plotly.com/r/) pour faire des figures: il s'agit d'une librairie `Javascript` qui peut être appelée grâce à des librairies clientes en {{< fa brands r-project >}} ou {{< fa brands python >}}. 
+
+
+La première valorisation qui sera intégrée dans l'application web est un graphique décrivant le trafic aérien au niveau d'un aéroport. Nous allon d'abord créer une figure minimale (avec `ggplot` {{< fa brands r-project >}} ou son équivalent {{< fa brands python >}} `plotnine`) pour vérifier que
+nos données ont bien la dimension temporelle attendue. Cependant, comme `Shiny` est un système interactif, nous allons ensuite utiliser la librairie [`Plotly`](https://plotly.com/r/) pour faire des figures dynamiques: il s'agit d'une librairie `Javascript` qui peut être appelée grâce à des librairies clientes en {{< fa brands r-project >}} ou {{< fa brands python >}}. 
 
 {{< include "parts/99-exo3.qmd" >}}
 
 
-## Tableau HTML pour afficher des données
+## Valorisation 2: Tableau HTML pour afficher des données
 
-La première valorisation que nous intégrerons dans notre application est
-le modèle de figure ci-dessus. La deuxième sera un tableau
+La deuxième valorisation qui sera intégrée dans l'application web est un tableau
 permettant de visualiser certaines données directement dans le _dashboard_. 
 Il existe plusieurs _packages_ pour faire cela, que ce soit en {{< fa brands r-project >}} ou {{< fa brands python >}}. 
 
 L'écosystème le plus
-complet pour faire cela est développé par `Posit` et
+complet pour construire ce tableau est développé par `Posit` et
 est quasi équivalent qu'on fasse du {{< fa brands r-project >}} ou du {{< fa brands python >}} (il est plus complet en {{< fa brands r-project >}} car plus ancien dans ce langage). 
 Il s'agit du _package_ [`GT`](https://gt.rstudio.com/) ({{< fa brands r-project >}}) ou [`Great Tables`](https://posit-dev.github.io/great-tables/articles/intro.html) ({{< fa brands python >}}). En peu de temps,
 ces _packages_ sont devenus incontournables et proposent des fonctionnalités bien
 plus complètes que les solutions qui existaient par le passé, notamment [`DT`](https://rstudio.github.io/DT/).
 
 
-Pour le prochain exercice, vous pourrez utiliser ces objets
+Pour le prochain exercice, vous pourrez utiliser les objets suivants. Copiez-les à la fin de votre script `main`.
 
 ::::: {.panel-tabset group="language"}
 
@@ -213,9 +294,9 @@ MONTHS_LIST = list(range(1, 13))
 {{< include "parts/99-exo4.qmd" >}}
 
 
-## Carte des aéroports
+## Valorisation 3: Carte des aéroports
 
-La dernière valorisation que nous allons intégrer est une carte interactive
+La troisième valorisation qui sera intégrée dans l'application web est une carte interactive
 du trafic de nos aéroports. Cette carte va être assez basique. Si vous
 désirez mettre en oeuvre des visualisations plus complexes, vous pouvez
 tout à fait le faire. 
@@ -229,8 +310,8 @@ code. Cela nous facilitera la transformation ultérieure en fonction.
 ## {{< fa brands r-project >}}
 
 ```{r}
-months <- 1
-years <- 2019
+month <- 1
+year <- 2019
 ```
 
 Voici également une palette de couleurs qui sera utile à la fin de l'exercice. 
@@ -242,8 +323,8 @@ palette <- c("green", "blue", "red")
 ## {{< fa brands python >}}
 
 ```{r}
-months = 1
-years = 2019
+month = 1
+year = 2019
 ```
 
 Voici également une palette de couleurs qui sera utile à la fin de l'exercice. 
@@ -262,14 +343,18 @@ palette = c("green", "blue", "red")
 Maintenant tous les ingrédients sont là pour transformer cette chaîne en application
 interactive. L'architecture de notre application sera la suivante :
 
-![](img/ui-r.png)
+![Architecture de notre application (ici illustrée par l'exemple {{< fa brands r-project >}})](img/ui-r.png)
 
-Comme toute application _web_, `Shiny` repose sur deux piliers : 
+Comme toute application _web_, `Shiny` ou `Streamlit` reposent sur deux piliers : 
 
-- l'interface utilisateur (UI) qui présente au navigateur des actions possibles et affiche des _output_ adaptés
-- le serveur qui répond à ces actions de l'utilisateur, produit les _output_ et les envoie à l'interface
+- l'interface utilisateur (UI) qui présente au navigateur des actions possibles et affiche des _output_ adaptés;
+- le serveur qui répond à ces actions de l'utilisateur, produit les _outputs_ et les envoie à l'interface.
 
-Supprimer les fichiers `ui.R` et `server.R` dans votre dossier de travail. Nous allons les recréer progressivement afin de comprendre, pas à pas, la logique d'une application.
+`Shiny` ou `Streamlit` fonctionnent un peu différemment dans la manière de faire interagir ces deux éléments:
+
+- `Shiny` nécessite deux fichiers: un pour l'interface graphique (`ui.R`) et l'autre pour le serveur (`server.R`). L'aller-retour entre ces deux fichiers se fait par des objets communs, les _inputs_ du serveur (qui sont les éléments de l'interface graphique) et les _outputs_ du serveur (le résultat des calculs, à afficher sur la page web) ;
+- `Streamlit` propose de tout mettre dans un fichier. Les éléments de l'interface graphique sont à la fois des _widgets_ qui seront représentés sur la page et des objets `Python` ayant une valeur correspondant à celle sélectionnée sur la page. 
+
 
 {{< include "parts/99-exo6.qmd" >}}
 
@@ -280,16 +365,19 @@ Supprimer les fichiers `ui.R` et `server.R` dans votre dossier de travail. Nous 
 
 # Partager cette application : une ouverture vers la mise en production
 
+<td><span class="level-button level-expert">Expert</span></td>
+
 ::: {.callout-warning}
 ## Difficulté technique de cette partie
 Cette partie est __plus avancée__ car elle fait appel à des notions techniques assez complexes
 dont certaines sortent, à proprement parler, du champ de compétences des _data scientists_. 
 
-Il est néanmoins fort utile d'apprendre afin d'être autonome dans la mise à disposition
+Il est néanmoins fort utile de découvrir celles-ci afin d'être autonome dans la mise à disposition
 de ses applications, un format de valorisation de plus en plus commun. 
 :::
 
-Dans cette partie on propose de déployer l'application sur le SSP Cloud et de la rendre accessible depuis Internet. L'exercice constitue une introduction à la mise en production d'applications dans un environnement Cloud. Pour aller plus loin, n'hésitez pas à consulter [ce cours de 3e année de l'ENSAE](https://ensae-reproductibilite.github.io/website/).
+Dans cette partie, on propose de déployer l'application sur le `SSPCloud` et de la rendre accessible depuis Internet. L'exercice constitue une introduction à la mise en production d'applications dans un environnement _cloud_. Pour aller plus loin, n'hésitez pas à consulter [ce cours de 3e année de l'ENSAE](https://ensae-reproductibilite.github.io/website/).
+
 
 
 ## Conteneurisation de l'application
@@ -300,12 +388,28 @@ Ainsi, conteneuriser une application permet de la rendre plus facile à déploye
 
 Nous ne vous demandons pas de construire l'image vous-même, l'image est déjà publique sur [`Dockerhub`](https://hub.docker.com/r/inseefrlab/funathon2024-sujet2/) et peut-être utilisée pour déployer l'application. Néanmoins, il est intéressant, pour comprendre la logique de fonctionnement de Docker, de regarder la recette de construction de cette image
 
+::::: {.panel-tabset group="language"}
+
+## {{< fa brands r-project >}}
+
 ```{.python include="docker/Dockerfile" filename="Dockerfile"}
 ```
 
+## {{< fa brands python >}}
+
+```{.python include="docker/Dockerfile_python" filename="Dockerfile"}
+```
+
+:::::
+
+
 Les principales étapes de cette construction d'image sont les suivantes :
 
-* 1️⃣ On part d'une image de base qui correspond à celle dans laquelle on a développé notre application et qui fonctionnait. On pourrait partir d'un environnement plus minimaliste (une machine Linux avec seulement `R` installé, comme les images [`rocker`](https://rocker-project.org/)) mais nous aurions peut-être à installer des librairies système en plus par un processus d'essai-erreur coûteux en temps
+* 1️⃣ On part d'une image de base qui correspond à celle dans laquelle on a développé notre application et qui fonctionnait. On pourrait partir d'un environnement plus minimaliste (une machine Linux avec seulement `R` installé, comme les images [`rocker`](https://rocker-project.org/)) mais nous aurions peut-être à installer des librairies système en plus par un processus d'essai-erreur coûteux en temps.
+
+::::: {.panel-tabset group="language"}
+
+## {{< fa brands r-project >}}
 
 <details>
 <summary>
@@ -317,73 +421,157 @@ Partie du `Dockerfile` en question
 
 </details>
 
-* 2️⃣ On ajoute dans le conteneur les fichiers indispensables au fonctionnement de notre application. Le conteneur, par défaut, n'a pas les fichiers de notre projet, on doit donc dire à `Docker` quels fichiers on désire avoir dans notre application
+## {{< fa brands python >}}
 
 <details>
 <summary>
 Partie du `Dockerfile` en question
 </summary>
 
-```{.python include="docker/Dockerfile" filename="Dockerfile" start-line=3 end-line=10}
+```{.python include="docker/Dockerfile_python" filename="Dockerfile" end-line=1}
 ```
 
 </details>
 
-* 3️⃣ On définit des paramètres sur le routage de notre application dans le conteneur. Ces paramètres nous serons utiles ultérieurement, lors du déploiement
+
+:::::
+
+
+
+* 2️⃣ On ajoute dans le conteneur les fichiers indispensables au fonctionnement de notre application. Le conteneur, par défaut, n'a pas les fichiers de notre projet, on doit donc dire à `Docker` quels fichiers on désire avoir dans notre application.
+
+::::: {.panel-tabset group="language"}
+
+## {{< fa brands r-project >}}
 
 <details>
 <summary>
 Partie du `Dockerfile` en question
 </summary>
 
-```{.python include="docker/Dockerfile" filename="Dockerfile" start-line=12 end-line=15}
+```{.r include="docker/Dockerfile" filename="Dockerfile" start-line=3 end-line=10}
 ```
 
 </details>
 
-* 4️⃣ On restaure l'environnement avec `renv`. De cette manière, on est assuré que l'application aura le même environnement que celui que nous avons prévu lors de la phase de développement. 
+
+## {{< fa brands python >}}
 
 <details>
 <summary>
 Partie du `Dockerfile` en question
 </summary>
 
-```{.python include="docker/Dockerfile" filename="Dockerfile" start-line=17 end-line=17}
+```{.python include="docker/Dockerfile_python" filename="Dockerfile" start-line=3 end-line=10}
 ```
 
 </details>
 
-* 5️⃣ On définit la commande qui sera exécutée au lancement de notre application. En l'occurrence, c'est une ligne de commande Linux pour lancer l'application `Shiny`
+:::::
+
+
+* 3️⃣ On définit des paramètres sur le routage de notre application dans le conteneur (seulement nécessaire pour la solution {{< fa brands r-project >}}). Ces paramètres nous seront utiles ultérieurement, lors du déploiement.
+
+::::: {.panel-tabset group="language"}
+
+## {{< fa brands r-project >}}
 
 <details>
 <summary>
 Partie du `Dockerfile` en question
 </summary>
 
-```{.python include="docker/Dockerfile" filename="Dockerfile" start-line=19 end-line=20}
+```{.r include="docker/Dockerfile" filename="Dockerfile" start-line=13 end-line=16}
 ```
 
 </details>
+
+## {{< fa brands python >}}
+
+Cette étape n'est pas nécessaire. 
+
+:::::
+
+* 4️⃣ On restaure l'environnement avec `renv` ({{< fa brands r-project >}}) ou `pip` ({{< fa brands python >}}). De cette manière, on est assuré que l'application aura le même environnement que celui que nous avons prévu lors de la phase de développement. 
+
+::::: {.panel-tabset group="language"}
+
+## {{< fa brands r-project >}}
+
+<details>
+<summary>
+Partie du `Dockerfile` en question
+</summary>
+
+```{.r include="docker/Dockerfile" filename="Dockerfile" start-line=18 end-line=18}
+```
+
+</details>
+
+## {{< fa brands python >}}
+
+<details>
+<summary>
+Partie du `Dockerfile` en question
+</summary>
+
+```{.python include="docker/Dockerfile_python" filename="Dockerfile" start-line=13 end-line=14}
+```
+
+</details>
+
+:::::
+
+
+* 5️⃣ On définit la commande qui sera exécutée au lancement de notre application. En l'occurrence, c'est une ligne de commande Linux pour lancer l'application `Shiny` ou `Streamlit`
+
+::::: {.panel-tabset group="language"}
+
+## {{< fa brands r-project >}}
+
+<details>
+<summary>
+Partie du `Dockerfile` en question
+</summary>
+
+```{.r include="docker/Dockerfile" filename="Dockerfile" start-line=20 end-line=21}
+```
+
+</details>
+
+## {{< fa brands python >}}
+
+<details>
+<summary>
+Partie du `Dockerfile` en question
+</summary>
+
+```{.python include="docker/Dockerfile_python" filename="Dockerfile" start-line=16 end-line=17}
+```
+
+</details>
+
+:::::
 
 Si le `Dockerfile` est la recette pour créer notre application, où se trouve la cuisine pour préparer
 notre plat ? En général, on passe par des systèmes d'intégration continue, des serveurs mis à disposition
 en complément de forges `Git` pour tester le `Dockerfile`. Pour en savoir plus sur l'intégration continue, 
 vous pouvez consulter le [cours de 3e année de l'ENSAE](https://ensae-reproductibilite.github.io/website/chapters/portability.html#les-conteneurs). 
 
-Voici le fichier `.github/workflows/shiny.yaml` qui contient la suite d'instruction donnée aux serveurs
+Voici le fichier `.github/workflows/app.yaml` qui contient la suite d'instruction donnée aux serveurs
 de `Github` pour exécuter notre chaine de production de l'image `Docker`. Celui-ci est quasiment une reprise mot pour mot de l'exemple de la [documentation Github](https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action).
 
 <details>
 <summary>
-Le _workflow_ `Github` en question
+Le _workflow_ `Github` en question ({{< fa brands r-project >}} et {{< fa brands python >}})
 </summary>
 
-```{.python include=".github/workflows/shiny.yaml" filename=".github/workflows/shiny.yaml"}
+```{.python include=".github/workflows/app.yaml" filename=".github/workflows/app.yaml"}
 ```
 
 </details>
 
-## Utilisation de l'image Docker pour mettre à disposition le `Shiny`
+## Utilisation de l'image Docker pour mettre à disposition le `Shiny` ou `Streamlit`
 
 Nous avons créé une image Docker qui est disponible sur Dockerhub, le réseau social de Docker. 
 Pour rendre celle-ci vivante, nous devons la déployer dans un conteneur. 
@@ -395,18 +583,17 @@ L'image peut à présent être récupérée et déployée. Dans notre cas, on va
 
 Afin de déployer l'application, suivre les instructions suivantes :
 
-- Inspecter les fichiers `deployment/deployment.yml`, `deployment/service.yml` et `deployment/ingress.yml` et repérer les éléments suivants :
-    - L'emplacement où est spécifié l'image à déployer;
-    - L'emplacement où est spécifié les ressources computationnelles allouées;
-    - L'emplacement où est spécifié l'URL à laquelle sera exposée l'application sur Internet. La modifier (à 2 reprises) pour y indiquer une adresse personalisée pour le déploiement. Seule contrainte, elle doit être de la forme `*.lab.sspcloud.fr`;
 - Ouvrir un `Terminal`;
 - Clôner le dépôt (`git clone https://github.com/InseeFrLab/funathon2024_sujet2_cd`)
 - Se placer à la racine du projet (`cd funathon2024_sujet2_cd`);
-- Appliquer les contrats Kubernetes avec la commande `kubectl apply -f kubernetes/`;
+- Inspecter les fichiers `shiny/deployment.yml`, `shiny/service.yml` et `shiny/ingress.yml` (parcours {{< fa brands r-project >}}) ou `streamlit/deployment.yml`, `streamlit/service.yml` et `streamlit/ingress.yml` (parcours {{< fa brands python >}}) et repérer les éléments suivants :
+    - L'emplacement où est spécifié l'image à déployer;
+    - L'emplacement où sont spécifiées les ressources computationnelles allouées;
+    - L'emplacement où est spécifiée l'URL à laquelle sera exposée l'application sur Internet. La modifier (à 2 reprises) pour y indiquer une adresse personalisée pour le déploiement. Seule contrainte, elle doit être de la forme `*.lab.sspcloud.fr`;
+- Appliquer les contrats Kubernetes avec la commande `kubectl apply -f shiny/` ou `kubectl apply -f streamlit/` selon le langage utilisé ;
 - Vérifier le lancement du conteneur avec la commande `kubectl get pods`. Le nom associé devrait être de la forme `funathon2024-sujet2-deployment-*`;
 - Attendre que le conteneur obtienne le statut `Running`.
-- Copier le nom associé à votre service et faire `kubectl logs <nom_copié>`
+- Copier le nom associé à votre service et faire `kubectl logs <nom_copié>`.
 
-3. Entrer dans un navigateur l'URL spécifiée dans le fichier `kubernetes/ingress.yaml`, et vérifier que l'application fonctionne correctement ! Jouer avec et observer, dans le terminal que vous aviez ouvert, l'évolution de vos _logs_ quand vous faites une action
-
+3. Entrer dans un navigateur l'URL spécifiée dans le fichier `streamlit/ingress.yaml` ou `shiny/ingress.yaml`, et vérifier que l'application fonctionne correctement ! Jouer avec et observer, dans le terminal que vous aviez ouvert, l'évolution de vos _logs_ quand vous faites une action.
 :::
