@@ -5,17 +5,23 @@ project:
 
 website:
   title: "✈️"
+  repo-url: https://github.com/inseefrlab/funathon2024_sujet2
+  repo-actions: [edit, issue]
   navbar:
     left:
       - href: index.qmd
         text: Consigne de l'exercice
       - href: https://rplane-dashboard.kub.sspcloud.fr/
         text: Tableau de bord (version {{< fa brands r-project >}})
+      - href: https://pylot-dashboard.kub.sspcloud.fr/
+        text: Tableau de bord (version {{< fa brands python >}})
+      - icon: github
+        href: https://github.com/inseefrlab/funathon2024_sujet2
 
 
 format:
   html:
-    theme: cosmo
+    theme: [cosmo, custom.scss]
     toc: true
     code-link: true
 

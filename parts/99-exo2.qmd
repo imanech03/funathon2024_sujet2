@@ -1,16 +1,12 @@
 ::: {.callout-note collapse="false" icon=false}
 ## `<i class="bi bi-book"></i>`{=html} Exercice 2: découvrir les différentes sources
 
-Cet exercice est, en apparence, un peu long. Néanmoins la première partie
-de celui-ci permet la construction d'une fonction générique d'import
-des données qui permet ensuite de gagner
-du temps et d'éviter la redondance de code. 
+Dans cet exercice, vous allez découvrir les sources utilisées dans le tutoriel et développer des fonctions génériques de traitement de données qui seront ensuite utilisées par l'application web.
 
 #### Données aéroports {.unnumbered}
 
-* Comme les données sont des CSV européens (séparateur `;`),
-utiliser `read_csv2` du package `readr` pour lire les données à partir 
-de la liste de fichiers `unlist(urls$airports)`[^utilitr-csv].
+* Les données sont des CSV européens (avec le séparateur `;`). Il est donc conseillé d'utiliser la fonction `read_csv2` du package `readr` pour lire les données à partir 
+de la liste de fichiers `unlist(urls$airports)`[^utilitr-csv] si vous utilisez {{< fa brands r-project >}}, et d'utiliser la fonction `read_csv` du package `pandas` pour lire les données à partir de la liste de fichiers `list(urls['airports'].values())` si vous utilisez {{< fa brands python >}}.
 * Il est recommandé de ne pas laisser les types par défaut des colonnes mais de figer ceux-ci avec l'argument suivant:
 
 ::::: {.panel-tabset group="language"}
@@ -31,7 +27,7 @@ col_types = cols(
 ## {{< fa brands python >}}
 
 ```{.python}
-col_types = {
+dtype = {
     "ANMOIS": "str",  
     "APT": "str",     
     "APT_NOM": "str", 
@@ -41,7 +37,7 @@ col_types = {
 
 :::::
 
-* A partir de la variable `ANMOIS`, créer les variables `an` et `mois`.
+* A partir de la variable `ANMOIS`, créer les variables `an` et `mois`. Penser à enlever les 0 des mois de janvier à septembre.
 
 <details>
 <summary>
@@ -60,7 +56,7 @@ Pour extraire des éléments d'une chaine de caractère à partir de la position
 ## Conseil pour se faciliter la vie ultérieurement
 
 Il est recommandé d'utiliser `str_remove` pour retirer les zéros en début de mois
-qui pourront nous créer des difficultés ultérieurement
+qui pourront nous créer des difficultés ultérieurement.
 :::
 
 Si vous êtes toujours bloqué, la solution est donnée plus bas 👇
@@ -68,7 +64,7 @@ Si vous êtes toujours bloqué, la solution est donnée plus bas 👇
 
 ## {{< fa brands python >}}
 
-Vous pouvez utiliser les méthodes de données textuelles `str.sub` et `str.replace` de `Pandas`
+Vous pouvez utiliser les méthodes de données textuelles `str.sub` et `str.replace` de `Pandas`.
 
 :::::
 
@@ -76,7 +72,7 @@ Vous pouvez utiliser les méthodes de données textuelles `str.sub` et `str.repl
 
 
 
-* Créer une fonction `clean_dataframe` qui reprend le code de création des variables `an` et `mois`, ajoute une étape de passage des noms de colonne en minuscule et renvoie le dataframe en sortie
+* Créer une fonction `clean_dataframe` qui prend en entrée un dataframe, crée les variables `an` et `mois`, ajoute une étape de passage des noms de colonne en minuscule et renvoie le dataframe en sortie.
 
 <details>
 <summary>
@@ -89,13 +85,13 @@ Solution
 ## {{< fa brands r-project >}}
 
 
-```{.r include="R/clean_dataframe.R"}
+```{.r include="correction/R/clean_dataframe.R"}
 ```
 
 
 ## {{< fa brands python >}}
 
-```{.python include="src/clean_dataframe.py"}
+```{.python include="correction/src/clean_dataframe.py"}
 ```
 
 
@@ -106,7 +102,8 @@ Solution
 
 * Créer une fonction `import_airport_data` qui prend en _input_ `list_files`
 et intègre les deux étapes précédentes: la lecture des données, le nettoyage
-avec `clean_dataframe`.
+avec `clean_dataframe`. Dans le cas de Python, ne pas oublier de concaténer 
+les différentes tables avec `pd.concat`.
 
 <details>
 <summary>
@@ -117,7 +114,7 @@ Solution
 
 ## {{< fa brands r-project >}}
 
-```{.r include="R/import_data.R" start-line=1 end-line=17}
+```{.r include="correction/R/import_data.R" start-line=1 end-line=17}
 ```
 
 
@@ -129,7 +126,7 @@ source("R/clean_dataframe.R")
 
 ## {{< fa brands python >}}
 
-```{.python include="src/import_data.py" start-line=1 end-line=12}
+```{.python include="correction/src/import_data.py" start-line=1 end-line=22}
 ```
 
 * Reporter cette fonction dans un fichier `src/clean_dataframe.py` et faire
@@ -174,7 +171,7 @@ col_types = cols(
 Solution
 </summary>
 
-```{.r include="R/import_data.R" start-line=20 end-line=38}
+```{.r include="correction/R/import_data.R" start-line=20 end-line=38}
 ```
 
 </details>
@@ -200,7 +197,7 @@ col_types = {
 Solution
 </summary>
 
-```{.r include="src/import_data.py" start-line=26 end-line=46}
+```{.python include="correction/src/import_data.py" start-line=26 end-line=46}
 ```
 
 </details>
@@ -237,7 +234,7 @@ col_types = cols(
 Solution
 </summary>
 
-```{.r include="R/import_data.R" start-line=41 end-line=60}
+```{.r include="correction/R/import_data.R" start-line=41 end-line=60}
 ```
 
 </details>
@@ -262,10 +259,56 @@ col_types = {
 Solution
 </summary>
 
-```{.python include="src/import_data.py" start-line=49 end-line=70}
+```{.python include="correction/src/import_data.py" start-line=49 end-line=69}
 ```
 
 </details>
+
+:::::
+
+#### Construction de fichiers de fonctions {.unnumbered}
+
+1. Reporter la fonction `clean_dataframe` dans un fichier `R/clean_dataframe.R` ({{< fa brands r-project >}}) ou `topinambour/clean_dataframe.py` ({{< fa brands python >}}).
+
+
+2. Reporter les fonctions `import_airport_data`, `import_compagnies_data` et `import_liaisons_data` dans un fichier `R/import_data.R` ({{< fa brands r-project >}}) ou `scr/import_data.py` ({{< fa brands python >}}). Dans le cas de Python, le fichier devra commencer par ceci:
+
+```
+import pandas as pd
+from .clean_dataframe import clean_dataframe
+```
+
+::::: {.panel-tabset group="language"}
+
+## {{< fa brands r-project >}}
+
+A l'issue de cette partie, vous devriez avoir le fichier `R/import_data.R` suivant
+
+<details>
+<summary>
+Le fichier `R/import_data.R` attendu
+</summary>
+
+```{.r include="correction/R/import_data.R" filename="R/import_data.R"}
+```
+
+</details>
+
+## {{< fa brands python >}}
+
+
+A l'issue de cette partie, vous devriez avoir le fichier `src/import_data.py` suivant
+
+<details>
+<summary>
+Le fichier `src/import_data.py` attendu
+</summary>
+
+```{.python include="correction/src/import_data.py" filename="src/import_data.py"}
+```
+
+</details>
+
 
 :::::
 
@@ -276,7 +319,7 @@ il est recommandé de consulter :
 
 - Pour les utilisateurs de {{< fa brands r-project >}}: la [fiche `utilitR`](https://book.utilitr.org/03_Fiches_thematiques/Fiche_donnees_spatiales.html) sur
 le sujet ou [ce cours introductif](https://rgeo.linogaliana.fr/exercises/geospatial-wrangling.html).
-- Pour les utilisateurs de {{< fa brands python >}}: ce chapitre du [cours de `Python` de l'ENSAE](https://pythonds.linogaliana.fr/content/manipulation/04a_webscraping_TP.html).
+- Pour les utilisateurs de {{< fa brands python >}}: ce chapitre du [cours de `Python` de l'ENSAE](https://pythonds.linogaliana.fr/content/manipulation/03_geopandas_intro.html).
 
 ::::: {.panel-tabset group="language"}
 
@@ -297,10 +340,14 @@ le sujet ou [ce cours introductif](https://rgeo.linogaliana.fr/exercises/geospat
 <summary>
 Aide
 </summary>
-La fonction à utiliser est `sf_crs` {{< fa brands r-project >}} ou l'attribut `crs` pour {{< fa brands python >}} 
+La fonction à utiliser est `st_crs` {{< fa brands r-project >}} ou l'attribut `crs` pour {{< fa brands python >}} 
 </details>
 
-3. Il est toujours utile de vérifier que nos données sont bien localisées où on les attend. Pour cela, il est pertinent de faire une carte avec un fond de carte contextuel, même si celle-ci n'est pas très soignée. Pour faire ceci, le plus simple est d'utiliser la [fonction `addMarkers`](https://rstudio.github.io/leaflet/articles/markers.html) du package `leaflet`.
+3. Il est toujours utile de vérifier que nos données sont bien localisées où on les attend. Pour cela, il est pertinent de faire une carte avec un fond de carte contextuel, même si celle-ci n'est pas très soignée. Pour faire ceci, le plus simple est d'utiliser la librairie Javascript Leaflet. L'usage n'est pas exactement le même en `R` et en Python:
+
+- la [fonction `addMarkers`](https://rstudio.github.io/leaflet/articles/markers.html) du package `leaflet` ({{< fa brands r-project >}});
+- les fonctions [`Map` et `add_to`](https://python-visualization.github.io/folium/latest/getting_started.html#GeoJSON/TopoJSON-overlays) du package `folium` ({{< fa brands python >}}).
+
 Essayez de faire cette carte vous-mêmes ou consultez l'aide ci-dessous
 
 <details>
@@ -320,50 +367,15 @@ import folium
 m = folium.Map()
 
 folium.GeoJson(airports_location).add_to(m)
+m
 ```
 
 </details>
 
-Reporter toutes ces fonctions dans un fichier `R/import_data.R` ({{< fa brands r-project >}}) ou `Python` ({{< fa brands python >}})
 :::
 
 [^utilitr-csv]: Si vous êtes peu familier avec ce type de fichiers, vous pouvez consulter la [fiche `utilitR`](https://book.utilitr.org/03_Fiches_thematiques/Fiche_import_fichiers_plats.html) sur le sujet ({{< fa brands r-project >}}) 
 [^crs]: Si vous êtes peu familier avec les données géographiques, vous pouvez retenir l'idée qu'il s'agit de données traditionnelles auxquelles s'ajoute une dimension spatiale. Cette dernière vise à localiser les données sur la terre. La localisation se fait dans un espace à deux dimensions (espace cartésien) alors que notre planète est une sphère en trois dimensions. Le principe d'un système de projection est de faire ce passage en deux dimensions des positions. Le plus connu est le système GPS, qui est un héritier lointain de la représentation du monde par [Mercator](https://fr.wikipedia.org/wiki/G%C3%A9rard_Mercator). Ce système est connu sous le nom de WGS 84 et porte le code EPSG 4326. L'autre système à retenir est le Lambert 93 (code EPSG 2154) qui est la projection légale en France (celle-ci, _a contrario_ du Mercator, ne déforme pas la France sur une carte). Pour en savoir plus sur les systèmes de représentation, les avantages et inconvénients de chacun, il existe de nombreuses ressources en ligne. Des éléments introductifs, et des démonstrations interactives, en lien avec la librairie `Geopandas` de `Python` sont disponibles [ici](https://pythonds.linogaliana.fr/content/manipulation/03_geopandas_intro.html#principe). 
-
-
-::::: {.panel-tabset group="language"}
-
-## {{< fa brands r-project >}}
-
-A l'issue de cet exercice, vous devriez avoir le fichier `R/import_data.R` suivant
-
-<details>
-<summary>
-Le fichier `R/import_data.R` attendu
-</summary>
-
-```{.r include="R/import_data.R" filename="R/import_data.R"}
-```
-
-</details>
-
-## {{< fa brands python >}}
-
-
-A l'issue de cet exercice, vous devriez avoir le fichier `src/import_data.py` suivant
-
-<details>
-<summary>
-Le fichier `src/import_data.py` attendu
-</summary>
-
-```{.r include="src/import_data.py" filename="src/import_data.py"}
-```
-
-</details>
-
-
-:::::
 
 La carte `leaflet` que vous devriez avoir obtenue à la fin de l'exercice
 est la suivante:
@@ -392,17 +404,22 @@ le code centralisé dans le script `R/import_data.R`
 peut être importé via le code suivant
 
 ```{r}
-source("R/import_data.R")  
+#| include: false
+source("correction/R/import_data.R")  
 ```
 
+```{r}
+#| eval: false
+source("R/import_data.R")
+```
 
 Vous pouvez initier un script nommé `main.R` avec les lignes suivante:
 
-```{.r include="global.R" start-line=24 end-line=34 filename="main.R"}
+```{.r include="correction/global.R" start-line=24 end-line=34 filename="main.R"}
 ```
 
 en les faisant précéder de l'import des
-scripts que nous avons déjà créé dans le dossier `R`:
+scripts que nous avons déjà créés dans le dossier `R`:
 
 ```r
 source("R/create_data_list.R")
