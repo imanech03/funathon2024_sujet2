@@ -207,6 +207,7 @@ summary_stat_airport(pax_apt_all)
 
 YEARS_LIST  <- as.character(2018:2022)
 MONTHS_LIST <- 1:12
+
 year <- YEARS_LIST[1]
 month <- MONTHS_LIST[1]
 
@@ -254,4 +255,7 @@ table_aeroports <- table_aeroports %>%
   tab_options(heading.subtitle.font.size = px(18)) %>% 
   opt_interactive()
 
-table_aeroports
+
+# 4.5 Valorisation 3 : Carte des aéroports ----
+
+
