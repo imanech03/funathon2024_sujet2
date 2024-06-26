@@ -6,6 +6,7 @@ libary(dplyr)
 library(sf)
 library(leaflet)
 library(leaflet.providers)
+library(shiny.semantic)
 
 # Fonction pour envoyer la liste des sources de données
 
