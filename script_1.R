@@ -285,31 +285,45 @@ leaflet(trafic_aeroports) %>%
 
 # 4.
 
+library(grDevices)
+
 trafic_aeroports <- trafic_aeroports %>% 
-  arrange(trafic) %>% 
-  mutate(tercile_size = len(trafic_aeroports) / 3)
+  mutate(volume = ntile(trafic, 3)) %>% 
+  mutate(color = palette[volume])
 
-terciles <- list()
+trafic_aeroports <- trafic_aeroports %>%
+  mutate(volume = ntile(trafic, 3)) 
+    
+
+# 5.
+
+getColor <- function(df) {
+  sapply(df$volume, function(volume) {
+    if(volume == 1) {
+      "green"
+    } else if (volume == 2) {
+      "blue"
+    } else {
+      "red"
+    }
+  })
+}
+
+icons <- awesomeIcons(
+  icon = 'plane',
+  iconColor = 'black',
+  library = 'fa',
+  markerColor = getColor(trafic_aeroports))
+
+carte_interactive <- leaflet(trafic_aeroports) %>%
+  addTiles() %>%
+  addAwesomeMarkers(popup = ~paste0(Nom, " (",Code.OACI, ") : ", trafic), icon=icons)
+
+carte_interactive
 
 
+# 5.b. On crée une fonction pour la production de cette carte
+
+map_leaflet_aiport <- function(df, aiports_location, month, year) {
   
-  mutate(volume = )
-
-
-for ()
-
-
-# Parcourez la colonne triée et attribuez le numéro de tercile à chaque valeur
-for i, valeur in enumerate(df_sorted['Valeurs']):
-  if i < tercile_size:
-  terciles.append(1)
-elif i < 2 * tercile_size:
-  terciles.append(2)
-else:
-  terciles.append(3)
-
-# Ajoutez la colonne des terciles au DataFrame d'origine
-df['Tercile'] = terciles
-
-# Affichez le DataFrame résultant
-print(df)
+}
