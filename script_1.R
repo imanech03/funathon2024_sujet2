@@ -258,4 +258,58 @@ table_aeroports <- table_aeroports %>%
 
 # 4.5 Valorisation 3 : Carte des aéroports ----
 
+# On fixe une date pour prototyper le code
 
+month <- "1"
+year <- "2019"
+
+# Palette de couleurs
+
+palette <- c("green", "blue", "red")
+
+# 1.
+
+trafic_date <- pax_apt_all %>% 
+  filter(mois == month,
+         annee == year)
+
+# 2.
+
+trafic_aeroports <- airports_location # Fusion déjà faite
+
+# 3.
+
+leaflet(trafic_aeroports) %>%
+  addTiles() %>%
+  addMarkers(popup = ~paste0(Nom, ": ", trafic))
+
+# 4.
+
+trafic_aeroports <- trafic_aeroports %>% 
+  arrange(trafic) %>% 
+  mutate(tercile_size = len(trafic_aeroports) / 3)
+
+terciles <- list()
+
+
+  
+  mutate(volume = )
+
+
+for ()
+
+
+# Parcourez la colonne triée et attribuez le numéro de tercile à chaque valeur
+for i, valeur in enumerate(df_sorted['Valeurs']):
+  if i < tercile_size:
+  terciles.append(1)
+elif i < 2 * tercile_size:
+  terciles.append(2)
+else:
+  terciles.append(3)
+
+# Ajoutez la colonne des terciles au DataFrame d'origine
+df['Tercile'] = terciles
+
+# Affichez le DataFrame résultant
+print(df)
