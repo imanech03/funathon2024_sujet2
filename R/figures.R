@@ -17,6 +17,15 @@ plot_airport_line <- function(df, selected_airport){
   return(figure_plotly)
 }
 
+# plot_airport_line <- function(df, aeroport) {
+#   
+#   aeroport <- df %>% filter(apt == aeroport)
+#   
+#   graph <-plot_ly(aeroport, x=~date, y = ~trafic, type = 'scatter', mode = 'lines+markers')
+#   
+#   return(graph)
+# }
+
 
 map_leaflet_airport <- function(df, airports_location, months, years){
   
